@@ -2,8 +2,10 @@ import React from 'react';
 import { FaAd, FaCalendar, FaHome, FaList, FaShoppingCart } from 'react-icons/fa';
 import { MdBorderColor, MdMenu, MdOutlineRateReview } from 'react-icons/md';
 import { NavLink, Outlet } from 'react-router-dom';
+import useCart from '../hooks/useCart';
 
 const Dashboard = () => {
+    const [cart] = useCart();
     return (
         <div className='flex'>
             {/* Dashboard sidebar */}
@@ -13,7 +15,7 @@ const Dashboard = () => {
 
                     <li><NavLink to='/dashboard/reservation'> <FaCalendar></FaCalendar> Reservation</NavLink></li>
 
-                    <li><NavLink to='/dashboard/cart'> <FaShoppingCart></FaShoppingCart> My Cart</NavLink></li>
+                    <li><NavLink to='/dashboard/cart'> <FaShoppingCart></FaShoppingCart> My Cart {cart.length} </NavLink></li>
 
                     <li><NavLink to='/dashboard/review'> <MdOutlineRateReview /> Review</NavLink></li>
 
