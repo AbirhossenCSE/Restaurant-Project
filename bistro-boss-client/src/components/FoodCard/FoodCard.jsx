@@ -4,16 +4,18 @@ import Swal from 'sweetalert2';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useCart from '../../hooks/useCart';
 
 
 const FoodCard = ({ item }) => {
     const { name, image, price, recipe, _id } = item;
-    const {user} = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const axiosSecure = useAxiosSecure();
+    const [, refetch] = useCart();
 
-    const handleAddToCart = food =>{
+    const handleAddToCart = () => {
         if (user && user.email) {
             // send to DB
             const cartItem = {
@@ -24,21 +26,23 @@ const FoodCard = ({ item }) => {
                 price
             }
             axiosSecure.post('/carts', cartItem)
-            .then(res => {
-                console.log(res.data);
-                if (res.data.insertedId) {
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: `${name} add to cart`,
-                        showConfirmButton: false,
-                        timer: 1500
-                      });
-                }
-                
-            })
+                .then(res => {
+                    console.log(res.data);
+                    if (res.data.insertedId) {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: `${name} add to cart`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        // refetch cart to upate cart item
+                        refetch();
+                    }
+
+                })
         }
-        else{
+        else {
             Swal.fire({
                 title: "You are not logged in",
                 text: "Please login",
@@ -47,14 +51,14 @@ const FoodCard = ({ item }) => {
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, Login!"
-              }).then((result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
-                //   send user to login page
-                navigate('/login', {state: {from: location}})
+                    //   send user to login page
+                    navigate('/login', { state: { from: location } })
                 }
-              });
+            });
         }
-        
+
     }
 
     return (
@@ -72,7 +76,7 @@ const FoodCard = ({ item }) => {
                     <p>Recipe: {recipe}</p>
                     <div className="card-actions justify-end">
                         <button
-                            onClick={() => handleAddToCart(item)}
+                            onClick={handleAddToCart}
                             className="btn btn-outline bg-slate-100 border-0 border-b-4 border-orange-400 mt-4"
                         >Add to Cart</button>
                     </div>
