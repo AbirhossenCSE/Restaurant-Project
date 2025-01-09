@@ -29,7 +29,17 @@ async function run() {
     const menuCollection = client.db('bistroDB').collection('menu')
     const reviewCollection = client.db('bistroDB').collection('reviews')
     const cartCollection = client.db('bistroDB').collection('carts')
+    const userCollection = client.db('bistroDB').collection('users')
 
+    // users related API
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
+      res.send(result);
+    })
+
+
+    // review related API
     app.get('/reviews', async (req, res) => {
       const result = await reviewCollection.find().toArray();
       res.send(result);
@@ -39,6 +49,7 @@ async function run() {
       const result = await menuCollection.find().toArray();
       res.send(result);
     })
+
 
     // carts section
     app.post('/carts', async (req, res) => {
