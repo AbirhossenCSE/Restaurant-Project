@@ -30,24 +30,26 @@ async function run() {
     const reviewCollection = client.db('bistroDB').collection('reviews')
     const cartCollection = client.db('bistroDB').collection('carts')
 
-    app.get('/reviews', async(req, res) =>{
-        const result = await reviewCollection.find().toArray();
-        res.send(result);
+    app.get('/reviews', async (req, res) => {
+      const result = await reviewCollection.find().toArray();
+      res.send(result);
     })
     // get reviews from database
-    app.get('/menu', async(req, res) =>{
-        const result = await menuCollection.find().toArray();
-        res.send(result);
+    app.get('/menu', async (req, res) => {
+      const result = await menuCollection.find().toArray();
+      res.send(result);
     })
 
     // carts section
-    app.post('/carts', async(req, res) =>{
+    app.post('/carts', async (req, res) => {
       const cartItem = req.body;
       const result = await cartCollection.insertOne(cartItem);
       res.send(result);
     })
-    app.get('/carts', async(req, res) =>{
-      const result = await cartCollection.find().toArray();
+    app.get('/carts', async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email }
+      const result = await cartCollection.find(query).toArray();
       res.send(result);
     })
 
@@ -63,9 +65,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Boss is sitting')
+  res.send('Boss is sitting')
 })
 app.listen(port, () => {
-    console.log(`Bistro boss is sitting on port ${port}`);
-    
+  console.log(`Bistro boss is sitting on port ${port}`);
+
 })
