@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaAd, FaCalendar, FaHome, FaList, FaShoppingCart } from 'react-icons/fa';
+import { MdBorderColor, MdMenu, MdOutlineRateReview } from 'react-icons/md';
 import { NavLink, Outlet } from 'react-router-dom';
 
 const Dashboard = () => {
@@ -14,13 +15,19 @@ const Dashboard = () => {
 
                     <li><NavLink to='/dashboard/cart'> <FaShoppingCart></FaShoppingCart> My Cart</NavLink></li>
 
-                    <li><NavLink to='/dashboard/review'> <FaAd></FaAd> Review</NavLink></li>
+                    <li><NavLink to='/dashboard/review'> <MdOutlineRateReview /> Review</NavLink></li>
 
                     <li><NavLink to='/dashboard/bookings'> <FaList></FaList> My Booking</NavLink></li>
+
+                    <div className='divider'></div>
+
+                    <li><NavLink to='/'> <FaHome></FaHome> Home</NavLink></li>
+                    <li><NavLink to='/menu'> <MdMenu /> Menu</NavLink></li>
+                    <li><NavLink to='/order/salad'> <MdBorderColor /> Order</NavLink></li>
                 </ul>
             </div>
             {/* dashboard content */}
-            <div className='flex-1'>
+            <div className='flex-1 p-4'>
                 <Outlet></Outlet>
             </div>
         </div>
