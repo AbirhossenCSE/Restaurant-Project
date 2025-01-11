@@ -31,21 +31,44 @@ async function run() {
     const cartCollection = client.db('bistroDB').collection('carts')
     const userCollection = client.db('bistroDB').collection('users')
 
+
+
     // users related API
     app.post('/users', async (req, res) => {
       const user = req.body;
       // insert user if user dosent exists:
       // you can do this many ways (1. email unique, 2. upsert, 3. simple checking)
-      const query = {email: user.email}
+      const query = { email: user.email }
       const existingUser = await userCollection.findOne(query);
       if (existingUser) {
-        return res.send({message: 'user already exists', insertedId: null})
+        return res.send({ message: 'user already exists', insertedId: null })
       }
       const result = await userCollection.insertOne(user);
       res.send(result);
     })
-    app.get('/users', async (req, res) =>{
+
+    app.get('/users', async (req, res) => {
       const result = await userCollection.find().toArray();
+      res.send(result);
+    })
+
+    // manage
+    app.delete('/users/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+    })
+    // make admin
+    app.patch('/users/admin/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          role: 'admin'
+        }
+      }
+      const result = await userCollection.updateOne(filter, updatedDoc);
       res.send(result);
     })
 
@@ -60,6 +83,7 @@ async function run() {
       const result = await menuCollection.find().toArray();
       res.send(result);
     })
+
 
 
     // carts section
