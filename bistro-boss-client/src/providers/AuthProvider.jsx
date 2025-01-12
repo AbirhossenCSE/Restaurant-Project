@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser);
             // console.log('current user', currentUser);
-            
+
             // for jWT-2
             if (currentUser) {
                 // get token and store token
@@ -64,7 +64,7 @@ const AuthProvider = ({ children }) => {
                 return unsubscribe();
             }
         }
-    }, [])
+    }, [axiosPublic])
 
     const authInfo = {
         user,
