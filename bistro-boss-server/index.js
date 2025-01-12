@@ -42,11 +42,18 @@ async function run() {
     })
     // middleware----------JWT-3
     const verifyToken = (req, res, next) => {
-      console.log('Inside VerifyToken', req.headers);
+      // console.log('Inside VerifyToken', req.headers.authorization);
       if (!req.headers.authorization) {
         return res.status(401).send({message: 'forbidden access'});
       }
       const token = req.headers.authorization.split(' ')[1];
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) =>{
+        if (err) {
+          return res.status(401).send({message: 'forbidden-access'})
+        }
+        req.decoded = decoded;
+        next();
+      })
       // next();
     }
 
