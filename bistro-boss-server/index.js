@@ -40,9 +40,10 @@ async function run() {
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
       res.send({ token });
     })
+
     // middleware----------JWT-3
     const verifyToken = (req, res, next) => {
-      console.log('Inside VerifyToken', req.headers.authorization);
+      // console.log('Inside VerifyToken', req.headers.authorization);
       if (!req.headers.authorization) {
         return res.status(401).send({ message: 'forbidden access' });
       }
@@ -55,6 +56,17 @@ async function run() {
         next();
       })
       // next();
+    }
+    // use verify admin after verifyToken
+    const verifyAdmin = async(req, res, next)=>{
+      const email = req.decoded.email;
+      const query = {email: email};
+      const user = await userCollection.findOne(query);
+      const isAdmin = user?.role === 'admin';
+      if (!isAdmin) {
+        return res.status(403).send({message: 'forbidden access'});
+      }
+      next();
     }
 
 
@@ -72,7 +84,7 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/users', verifyToken, async (req, res) => {
+    app.get('/users', verifyToken, verifyAdmin, async (req, res) => {
       const result = await userCollection.find().toArray();
       res.send(result);
     })
