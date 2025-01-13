@@ -58,19 +58,25 @@ async function run() {
       // next();
     }
     // use verify admin after verifyToken
-    const verifyAdmin = async(req, res, next)=>{
+    const verifyAdmin = async (req, res, next) => {
       const email = req.decoded.email;
-      const query = {email: email};
+      const query = { email: email };
       const user = await userCollection.findOne(query);
       const isAdmin = user?.role === 'admin';
       if (!isAdmin) {
-        return res.status(403).send({message: 'forbidden access'});
+        return res.status(403).send({ message: 'forbidden access' });
       }
       next();
     }
 
 
     // users related API
+    app.get('/users', verifyToken, verifyAdmin, async (req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    })
+
+
     app.post('/users', async (req, res) => {
       const user = req.body;
       // insert user if user dosent exists:
@@ -81,11 +87,6 @@ async function run() {
         return res.send({ message: 'user already exists', insertedId: null })
       }
       const result = await userCollection.insertOne(user);
-      res.send(result);
-    })
-
-    app.get('/users', verifyToken, verifyAdmin, async (req, res) => {
-      const result = await userCollection.find().toArray();
       res.send(result);
     })
 
@@ -129,9 +130,15 @@ async function run() {
       const result = await reviewCollection.find().toArray();
       res.send(result);
     })
+
     // get reviews from database
     app.get('/menu', async (req, res) => {
       const result = await menuCollection.find().toArray();
+      res.send(result);
+    })
+    app.post('/menu', verifyToken, verifyAdmin, async(req, res)=>{
+      const item = req.body;
+      const result = await menuCollection.insertOne(item);
       res.send(result);
     })
 
