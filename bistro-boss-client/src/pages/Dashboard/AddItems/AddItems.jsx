@@ -2,11 +2,25 @@ import React from 'react';
 import SectionTitle from '../../../components/SectionTitle/SectionTitle';
 import { useForm } from 'react-hook-form';
 import { FaUtensils } from 'react-icons/fa';
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const AddItems = () => {
-    const { register, handleSubmit } = useForm()
-    const onSubmit = (data) => {
+    const { register, handleSubmit } = useForm();
+    const axiosPublic = useAxiosPublic();
+
+    const onSubmit = async (data) => {
         console.log(data)
+        // upload image to imgbb and get an url
+        const imageFile = { image: data.image[0] }
+        const res = await axiosPublic.post(image_hosting_api, imageFile, {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        });
+        console.log(res.data);
     };
 
     return (
@@ -22,7 +36,7 @@ const AddItems = () => {
                         <input
                             type="text"
                             placeholder="Recipe Name"
-                            {...register("name", {required: true})}
+                            {...register("name", { required: true })}
                             className="input input-bordered w-full " />
                     </label>
                     <div className='flex gap-6'>
@@ -31,8 +45,8 @@ const AddItems = () => {
                             <div className="label">
                                 <span className="label-text">Category</span>
                             </div>
-                            <select {...register("category", {required: true})} className="select select-bordered w-full">
-                                <option disabled selected>Select a category</option>
+                            <select defaultValue='default' {...register("category", { required: true })} className="select select-bordered w-full">
+                                <option disabled value='default'>Select a category</option>
                                 <option value="salad">Salad</option>
                                 <option value="pizza">Pizza</option>
                                 <option value="soup">Soup</option>
@@ -48,17 +62,17 @@ const AddItems = () => {
                             <input
                                 type="number"
                                 placeholder="Price"
-                                {...register("price", {required: true})}
+                                {...register("price", { required: true })}
                                 className="input input-bordered w-full " />
                         </label>
                     </div>
                     <textarea
-                        {...register("recipe", {required: true})}
+                        {...register("recipe", { required: true })}
                         placeholder="Recipe Details"
                         className="textarea mt-6 textarea-bordered textarea-sm w-full">
                     </textarea>
                     <div className='mt-4'>
-                        <input {...register("image", {required: true})} type="file" className="file-input file-input-bordered w-full" />
+                        <input {...register("image", { required: true })} type="file" className="file-input file-input-bordered w-full" />
                     </div>
 
                     <button className='btn m-2'>Add Item <FaUtensils className='ml-2'></FaUtensils></button>
