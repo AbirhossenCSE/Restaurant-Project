@@ -1,20 +1,37 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import useCart from '../../../hooks/useCart';
 
 const CheckoutForm = () => {
     const stripe = useStripe();
+    const [clientSecret, setClientSecret] = useState('');
     const elements = useElements();
     const [error, setError] = useState('');
+
+    const axiosSecure = useAxiosSecure();
+    const [cart] = useCart();
+    const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+
+    useEffect(() => {
+        axiosSecure.post('/create-payment-intent', { price: totalPrice })
+            .then(res => {
+                setClientSecret(res.data.clientSecret);
+                console.log(res.data.clientSecret);
+            })
+    }, [axiosSecure, totalPrice])
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!stripe || !elements) {
             return
         }
+
         const card = elements.getElement(CardElement)
         if (card === null) {
             return
         }
+        
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card
