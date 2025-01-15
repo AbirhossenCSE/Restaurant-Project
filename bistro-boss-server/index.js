@@ -36,6 +36,7 @@ async function run() {
     const reviewCollection = client.db('bistroDB').collection('reviews')
     const cartCollection = client.db('bistroDB').collection('carts')
     const userCollection = client.db('bistroDB').collection('users')
+    const paymentCollection = client.db('bistroDB').collection('payments')
 
     // jwt related API---- JWT-2
     app.post('/jwt', async (req, res) => {
@@ -210,6 +211,19 @@ async function run() {
       res.send({
         clientSecret: paymentIntent.client_secret
       })
+    })
+    app.post('/payments', async (req, res) => {
+      const payment = req.body;
+      const paymentResult = await paymentCollection.insertOne(payment);
+
+      // delete each item from cart
+      // console.log('payment info', payment);
+      const query = {_id: {
+        $in: payment.cartIds.map(id => new ObjectId(id))
+      }};
+      const deleteResult = await cartCollection.deleteMany(query);
+
+      res.send({paymentResult, deleteResult});
     })
 
     // Send a ping to confirm a successful connection
