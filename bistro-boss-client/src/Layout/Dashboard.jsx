@@ -33,13 +33,13 @@ const Dashboard = () => {
                             <>
                                 <li><NavLink to='/dashboard/userHome'> <FaHome></FaHome> User Home</NavLink></li>
 
-                                <li><NavLink to='/dashboard/reservation'> <FaCalendar></FaCalendar> Reservation</NavLink></li>
+                                <li><NavLink to='/dashboard/history'> <FaCalendar></FaCalendar> History</NavLink></li>
 
                                 <li><NavLink to='/dashboard/cart'> <FaShoppingCart></FaShoppingCart> My Cart {cart.length} </NavLink></li>
 
                                 <li><NavLink to='/dashboard/review'> <MdOutlineRateReview /> Review</NavLink></li>
 
-                                <li><NavLink to='/dashboard/bookings'> <FaList></FaList> My Booking</NavLink></li>
+                                <li><NavLink to='/dashboard/paymentHistory'> <FaList></FaList> My Payment History</NavLink></li>
                             </>
                     }
 
