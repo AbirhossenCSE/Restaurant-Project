@@ -31,7 +31,7 @@ const AdminHome = () => {
                         <FaDollarSign className='text-2xl'></FaDollarSign>
                     </div>
                     <div className="stat-title">Revenue</div>
-                    <div className="stat-value">{stats.revenue}</div>
+                    <div className="stat-value">{stats?.revenue}</div>
                     <div className="stat-desc">Jan 1st - Feb 1st</div>
                 </div>
 
@@ -40,7 +40,7 @@ const AdminHome = () => {
                        <FaUsers></FaUsers>
                     </div>
                     <div className="stat-title">Users</div>
-                    <div className="stat-value">{stats.users}</div>
+                    <div className="stat-value">{stats?.users}</div>
                     <div className="stat-desc">↗︎ 400 (22%)</div>
                 </div>
                 <div className="stat">
@@ -48,7 +48,7 @@ const AdminHome = () => {
                        <FaBook></FaBook>
                     </div>
                     <div className="stat-title">Menu Items</div>
-                    <div className="stat-value">{stats.menuItems}</div>
+                    <div className="stat-value">{stats?.menuItems}</div>
                     <div className="stat-desc">↗︎ 400 (22%)</div>
                 </div>
 
@@ -57,7 +57,7 @@ const AdminHome = () => {
                     <FaProductHunt></FaProductHunt>
                     </div>
                     <div className="stat-title">Orders</div>
-                    <div className="stat-value">{stats.order}</div>
+                    <div className="stat-value">{stats?.order}</div>
                     <div className="stat-desc">↘︎ 90 (14%)</div>
                 </div>
             </div>
