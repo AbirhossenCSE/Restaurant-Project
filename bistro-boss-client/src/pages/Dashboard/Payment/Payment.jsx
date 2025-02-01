@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
 
-// TODO: Add publishable kay
+// Add publishable kay
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_GATEWAY);
 
 const Payment = () => {
