@@ -6,7 +6,6 @@ import NavBar from '../pages/Shared/NavBar/NavBar';
 const Main = () => {
     // navbar and footer hide
     const location = useLocation();
-    // console.log(location);
     const noHeaderFooter = location.pathname.includes('login') || location.pathname.includes('signup')
     
     return (
