@@ -50,7 +50,6 @@ const Dashboard = () => {
                     <li><NavLink to='/order/contact'> <FaEnvelope /> Contact</NavLink></li>
                 </ul>
             </div>
-            {/* dashboard content */}
             <div className='flex-1 p-4'>
                 <Outlet></Outlet>
             </div>
